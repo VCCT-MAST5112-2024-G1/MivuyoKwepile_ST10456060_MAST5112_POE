@@ -6,7 +6,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
-// Updated menu items with three items per course
 const menuItems: MenuItem[] = [
   { dishName: 'Ouzo', description: 'Anise-flavored aperitif', course: 'Drink', price: '5.00' },
   { dishName: 'Retsina', description: 'Resin wine', course: 'Drink', price: '8.00' },
@@ -28,16 +27,37 @@ const menuItems: MenuItem[] = [
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
+  const calculateAverages = () => {
+    const coursePrices: { [key: string]: number[] } = {};
+
+    menuItems.forEach((item) => {
+      if (!coursePrices[item.course]) {
+        coursePrices[item.course] = [];
+      }
+      coursePrices[item.course].push(parseFloat(item.price));
+    });
+
+    const averages = Object.entries(coursePrices).map(([course, prices]) => {
+      const avg = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+      return { course, averagePrice: avg.toFixed(2) };
+    });
+
+    return averages;
+  };
+
+  const averages = calculateAverages();
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <Text style={styles.title}>Greek Menu</Text>
-        
+
+        {/* Display Menu Sections */}
         {['Drink', 'Starter', 'Main', 'Dessert'].map((course) => (
           <View key={course}>
             <Text style={styles.sectionTitle}>{course}s</Text>
             <FlatList
-              data={menuItems.filter(item => item.course === course)}
+              data={menuItems.filter((item) => item.course === course)}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -55,6 +75,16 @@ export default function HomeScreen() {
             />
           </View>
         ))}
+
+        {/* Display Average Prices */}
+        <View style={styles.averagesSection}>
+          <Text style={styles.subtitle}>Average Prices by Course:</Text>
+          {averages.map((item) => (
+            <Text key={item.course} style={styles.averageText}>
+              {`${item.course}: $${item.averagePrice}`}
+            </Text>
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
@@ -85,5 +115,17 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
+  },
+  averagesSection: {
+    marginTop: 30,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  averageText: {
+    fontSize: 16,
+    marginVertical: 5,
   },
 });
