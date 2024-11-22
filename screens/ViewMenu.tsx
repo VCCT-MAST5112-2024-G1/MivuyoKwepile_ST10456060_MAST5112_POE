@@ -1,35 +1,37 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { MenuContext } from '../App';
 
-export default function ViewMenuScreen({ route }: any) {
-  const { menuItems } = route.params;
 
+  export default function ViewMenuScreen() {
+    const { menuItems, setMenuItems } = useContext(MenuContext);
+  
+    const removeMenuItem = (index: number) => {
+      const updatedItems = menuItems.filter((_, i) => i !== index);
+      setMenuItems(updatedItems);
+    };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Menu</Text>
-      {menuItems.length > 0 ? (
-        <FlatList
-          data={menuItems}
-          renderItem={({ item }) => (
-            <View style={styles.menuItem}>
-              <Text style={styles.dishName}>{item.dishName}</Text>
-              <Text style={styles.dishDetails}>{item.description}</Text>
-              <Text style={styles.dishCourse}>Course: {item.course}</Text>
-              <Text style={styles.dishPrice}>Price: ${item.price}</Text>
-            </View>
-          )}
-          keyExtractor={(_, index) => index.toString()}
-        />
-      ) : (
-        <Text style={styles.noItems}>No items in the menu yet.</Text>
-      )}
+      <FlatList
+        data={menuItems}
+        renderItem={({ item, index }) => (
+          <View style={styles.menuItem}>
+            <Text>{`${item.dishName} (${item.course}) - $${item.price}`}</Text>
+            <Text>{item.description}</Text>
+            <Button title="Remove" onPress={() => removeMenuItem(index)} />
+          </View>
+        )}
+        keyExtractor={(_, index) => index.toString()}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
-  title: { fontSize: 24, marginBottom: 20 },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
   menuItem: { padding: 15, borderWidth: 1, borderColor: '#ddd', borderRadius: 5, marginBottom: 10 },
   dishName: { fontSize: 18, fontWeight: 'bold' },
   dishDetails: { fontSize: 14, color: '#555' },

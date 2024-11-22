@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, MenuItem } from './RootStackParams';
+import { MenuContext } from '../App';
+
 
 type AddDishScreenProp = StackNavigationProp<RootStackParamList, 'AddDish'>;
 
