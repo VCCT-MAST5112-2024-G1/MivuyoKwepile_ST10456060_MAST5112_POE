@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, MenuItem } from './RootStackParams';
 import { MenuContext } from '../App';
 
-
 type AddDishScreenProp = StackNavigationProp<RootStackParamList, 'AddDish'>;
 
 export default function AddDishScreen({ navigation }: { navigation: AddDishScreenProp }) {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const { menuItems, setMenuItems } = useContext(MenuContext); // Access global context
   const [dishName, setDishName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [course, setCourse] = useState<string>('');
@@ -31,6 +30,10 @@ export default function AddDishScreen({ navigation }: { navigation: AddDishScree
     setDescription('');
     setCourse('');
     setPrice('');
+  };
+
+  const submitMenu = () => {
+    navigation.navigate('ViewMenu'); // Navigate to ViewMenu screen
   };
 
   const editMenuItem = (index: number) => {
@@ -75,7 +78,10 @@ export default function AddDishScreen({ navigation }: { navigation: AddDishScree
         keyboardType="numeric"
         style={styles.input}
       />
-      <Button title={editingIndex !== null ? 'Update Dish' : 'Add Dish'} onPress={addOrUpdateMenuItem} />
+      <Button
+        title={editingIndex !== null ? 'Update Dish' : 'Add Dish'}
+        onPress={addOrUpdateMenuItem}
+      />
 
       <FlatList
         data={menuItems}
@@ -92,9 +98,8 @@ export default function AddDishScreen({ navigation }: { navigation: AddDishScree
         keyExtractor={(_, index) => index.toString()}
       />
 
-      <Button
-        title="Home"
-        onPress={() => navigation.navigate('Home',)}
+      <Button title="Submit Menu" onPress={submitMenu} />
+      <Button title="Home" onPress={() => navigation.navigate('Home',)}
       />
     </View>
   );
