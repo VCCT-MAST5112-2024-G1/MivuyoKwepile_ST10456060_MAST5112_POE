@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList, MenuItem } from './RootStackParams';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -75,6 +75,10 @@ export default function HomeScreen() {
             />
           </View>
         ))}
+
+<Button title="Filter Menu" onPress={() => navigation.navigate('Filter')}
+  color="blue"
+/>
 
         {/* Display Average Prices */}
         <View style={styles.averagesSection}>

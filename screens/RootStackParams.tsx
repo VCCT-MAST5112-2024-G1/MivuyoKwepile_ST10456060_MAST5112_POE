@@ -10,5 +10,6 @@ export type RootStackParamList = {
     AddDish: undefined;
     Home: undefined;
     ViewMenu: { menuItems: { dishName: string; description: string; course: string; price: string }[] };
+    Filter: undefined
   };
   

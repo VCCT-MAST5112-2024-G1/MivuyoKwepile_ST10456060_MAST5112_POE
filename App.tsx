@@ -6,6 +6,7 @@ import SignInScreen from './screens/SignIn';
 import AddDishScreen from './screens/AddDish';
 import HomeScreen from './screens/Home';
 import ViewMenuScreen from './screens/ViewMenu';
+import FilterScreen from './screens/Filter';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="AddDish" component={AddDishScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="ViewMenu" component={ViewMenuScreen} />
+          <Stack.Screen name="Filter" component={FilterScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </MenuContext.Provider>
